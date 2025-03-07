@@ -38,3 +38,44 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Inicializar los mapas
+    const map1 = L.map('map1').setView([4.6097, -74.0817], 13);
+    const map2 = L.map('map2').setView([4.6097, -74.0817], 13);
+
+    // Agregar capas base
+    const vectorLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map1);
+
+    const rasterLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenTopoMap contributors'
+    }).addTo(map2);
+
+    // Cargar el polígono de Timiza en ambos mapas
+    fetch('modelia.geojson')
+        .then(response => response.json())
+        .then(data => {
+            L.geoJSON(data, { style: { color: 'blue', weight: 3, fillOpacity: 0.3 } }).addTo(map1);
+            L.geoJSON(data, { style: { color: 'blue', weight: 3, fillOpacity: 0.3 } }).addTo(map2);
+        })
+        .catch(error => console.error('Error cargando GeoJSON:', error));
+
+    // Barra deslizante para dividir los mapas
+    const slider = document.getElementById('slider');
+    let isDragging = false;
+
+    slider.addEventListener('mousedown', function () { isDragging = true; });
+    
+    document.addEventListener('mousemove', function (e) {
+        if (!isDragging) return;
+        let percentage = (e.clientX / window.innerWidth) * 100;
+        if (percentage < 10) percentage = 10;
+        if (percentage > 90) percentage = 90;
+        document.getElementById('map1').style.width = percentage + '%';
+        slider.style.left = percentage + '%';
+    });
+
+    document.addEventListener('mouseup', function () { isDragging = false; });
+});

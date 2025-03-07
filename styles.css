@@ -42,3 +42,28 @@ h2 {
     width: 100%;
     height: 100%;
 }
+
+.map-comparison-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+}
+
+/* MAPAS LADO A LADO */
+.map-side {
+    width: 50%;
+    height: 100%;
+}
+
+/* BARRA DESLIZANTE */
+#slider {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 4px;
+    height: 100%;
+    background: #fff;
+    cursor: ew-resize;
+    z-index: 10;
+}
